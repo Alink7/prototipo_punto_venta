@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Protototipo_punto_de_venta</string>
+    <string name="app_name">Prototipo_punto_de_venta</string>
     <string name="txt_cliente">Cliente:</string>
     <string name="btn_asignar">Asignar</string>
     <string name="txt_busqueda">Búsqueda de productos por nombre</string>
@@ -8,4 +8,8 @@
     <string name="txt_subtotal">Subtotal</string>
     <string name="txt_total">Total</string>
     <string name="txt_iva">IVA</string>
+    <string name="txt_cantidad">Cantidad:</string>
+    <string name="txt_nombre">Nombre:</string>
+    <string name="txt_precio">Precio:</string>
+    <string name="txt_descripcion">Descripcion:</string>
 </resources>

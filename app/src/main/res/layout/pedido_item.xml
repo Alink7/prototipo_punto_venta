@@ -2,6 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingTop="15dp"
+    android:paddingBottom="15dp"
+    android:paddingLeft="5dp"
+    android:paddingRight="5dp"
     >
 
     <TextView
@@ -9,8 +13,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/lista_nombre_producto"
         android:text="Producto"
-        android:textSize="16sp"
-        android:layout_marginLeft="30dp"
+        android:textSize="20sp"
+        android:layout_marginLeft="?android:attr/expandableListPreferredItemPaddingLeft"
         />
 
     <Space
@@ -21,21 +25,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Cantidad"
-        android:textSize="16sp"
+        android:textSize="20sp"
         />
 
-    <EditText
+    <!--<EditText
         android:id="@+id/cantidad_producto"
         android:layout_width="40dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
-        />
 
-    <Button
+        /> -->
+
+    <ImageButton
         android:id="@+id/eliminar_producto"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="X"
-        android:textSize="16sp"
+        android:background="@drawable/ic_highlight_off_black_24dp"
+        android:textSize="20sp"
         />
 </LinearLayout>

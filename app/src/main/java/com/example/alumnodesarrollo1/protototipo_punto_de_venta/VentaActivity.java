@@ -6,14 +6,14 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ExpandableListView;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.example.alumnodesarrollo1.protototipo_punto_de_venta.adapters.ListaPedidoAdapter;
 import com.example.alumnodesarrollo1.protototipo_punto_de_venta.bundles.PedidoDataBundle;
-import com.example.alumnodesarrollo1.protototipo_punto_de_venta.fragments.FragmentDatosPedido;
-import com.example.alumnodesarrollo1.protototipo_punto_de_venta.fragments.FragmentListaPedido;
+import com.example.alumnodesarrollo1.protototipo_punto_de_venta.pojos.Producto;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
@@ -21,9 +21,11 @@ public class VentaActivity extends AppCompatActivity {
 
     private AutoCompleteTextView txtCliente;
     private AutoCompleteTextView txtBusquedaProducto;
-    private List<String> listaProductos;
+    private List<Producto> listaProductos;
     private ListaPedidoAdapter adapter;
     private HashMap<String, List<String>> data;
+    private HashMap<String, Producto> listaMaestra;
+    private TextView txtSubtotal, txtIva, txtTotal;
     private boolean isTablet = false;
 
     @Override
@@ -31,21 +33,25 @@ public class VentaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_venta);
 
+        txtSubtotal = (TextView)findViewById(R.id.txtSubtotalValorBottom);
+        txtIva = (TextView)findViewById(R.id.txtIvaValorBottom);
+        txtTotal = (TextView)findViewById(R.id.txtTotalValorBottom);
+
         listarProductos();
         cargarClientes();
         cargarProductos();
         data = new PedidoDataBundle().getData();
 
         final ExpandableListView lista = (ExpandableListView)findViewById(R.id.listaProductosPedido);
-        adapter = new ListaPedidoAdapter(this, data, listaProductos);
+        adapter = new ListaPedidoAdapter(this, listaProductos);
         lista.setAdapter(adapter);
     }
 
     public void listarProductos(){
         listaProductos = new ArrayList<>();
-        listaProductos.add("producto1");
-        listaProductos.add("producto2");
-        listaProductos.add("producto3");
+        listaProductos.add(new Producto("producto1", "18.000", "descripcion1"));
+        listaProductos.add(new Producto("producto2", "19.000", "descripcion2"));
+        listaProductos.add(new Producto("producto3", "20.000", "descripcion3"));
     }
 
     public void cargarClientes(){
@@ -57,7 +63,14 @@ public class VentaActivity extends AppCompatActivity {
 
     public void cargarProductos(){
         txtBusquedaProducto = (AutoCompleteTextView) findViewById(R.id.txtBusquedaProducto);
-        String[] productos = {"producto1", "producto2", "producto3", "producto4", "producto5"};
+        //lista meastra de productos en bodega
+        listaMaestra = cargarListaMeastra();
+        Collection<Producto> listaBusqueda = listaMaestra.values();
+        String[] productos = new String[listaBusqueda.size()];
+        int i = 0;
+        for(Producto p : listaBusqueda){
+            productos[i++] = p.getNombre();
+        }
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, productos);
         txtBusquedaProducto.setAdapter(adapter);
     }
@@ -67,6 +80,18 @@ public class VentaActivity extends AppCompatActivity {
         txtBusquedaProducto.setText("");
         List<String> array = new ArrayList<>();
         array.add(producto);
-        adapter.addItem(producto, array);
+
+        adapter.addItem(listaMaestra.get(producto), txtSubtotal, txtIva, txtTotal);
+    }
+
+    public HashMap<String, Producto> cargarListaMeastra(){
+        HashMap<String, Producto> listaMaeastra = new HashMap<>();
+        listaMaeastra.put("Leche", new Producto("Leche", "500", ""));
+        listaMaeastra.put("Mantequilla", new Producto("Mantequilla", "500", ""));
+        listaMaeastra.put("Pan", new Producto("Pan", "500", ""));
+        listaMaeastra.put("Mermelada", new Producto("Mermelada", "500", ""));
+        listaMaeastra.put("Huevo", new Producto("Huevo", "500", ""));
+        listaMaeastra.put("Palta", new Producto("Palta", "500", ""));
+        return listaMaeastra;
     }
 }

@@ -17,6 +17,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.alumnodesarrollo1.protototipo_punto_de_venta.R;
+import com.example.alumnodesarrollo1.protototipo_punto_de_venta.pojos.Producto;
+
+import org.w3c.dom.Text;
 
 import java.util.HashMap;
 import java.util.List;
@@ -28,12 +31,12 @@ public class ListaPedidoAdapter extends BaseExpandableListAdapter {
 
     private Activity context;
     //el map debería ser Map<String, Objeto(Producto)>
-    private HashMap<String, List<String>> productoDetalle;
-    private List<String> productos;
+    //private HashMap<String, List<Producto>> productoDetalle;
+    private List<Producto> productos;
 
-    public ListaPedidoAdapter(Activity context, HashMap<String, List<String>> productoDetalle, List<String> productos){
+    public ListaPedidoAdapter(Activity context, List<Producto> productos){
         this.context = context;
-        this.productoDetalle = productoDetalle;
+        //this.productoDetalle = productoDetalle;
         this.productos = productos;
     }
 
@@ -45,7 +48,8 @@ public class ListaPedidoAdapter extends BaseExpandableListAdapter {
     @Override
     public int getChildrenCount(int groupPosition)
     {
-        return productoDetalle.get(productos.get(groupPosition)).size();
+        return 1;
+      //  return productoDetalle.get(productos.get(groupPosition).getNombre()).size();
     }
 
     @Override
@@ -55,7 +59,8 @@ public class ListaPedidoAdapter extends BaseExpandableListAdapter {
 
     @Override
     public Object getChild(int groupPosition, int childPosition) {
-        return productoDetalle.get(productos.get(groupPosition)).get(childPosition);
+       return null;
+        // return productoDetalle.get(productos.get(groupPosition).getNombre()).get(childPosition);
     }
 
     @Override
@@ -75,7 +80,7 @@ public class ListaPedidoAdapter extends BaseExpandableListAdapter {
 
     @Override
     public View getGroupView(final int groupPosition, boolean isExpanded, View convertView,final ViewGroup parent) {
-        String nombreProducto = (String) getGroup(groupPosition);
+        String nombreProducto = (String) ((Producto)getGroup(groupPosition)).getNombre();
         if(convertView == null){
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.pedido_item, null);
@@ -105,11 +110,20 @@ public class ListaPedidoAdapter extends BaseExpandableListAdapter {
 
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-        String detalle = (String)getChild(groupPosition, childPosition);
+        String nombre = ((Producto)getGroup(groupPosition)).getNombre();
+        String precio = ((Producto)getGroup(groupPosition)).getPrecio();
+        String descripcion = ((Producto)getGroup(groupPosition)).getDescripcion();
+
         LayoutInflater inflater = LayoutInflater.from(context);
         convertView = inflater.inflate(R.layout.pedido_item_detalle,parent, false);
-        TextView nombre = (TextView) convertView.findViewById(R.id.detalle_nombre_producto_label);
-        nombre.setText(detalle);
+
+        TextView txtNombre = (TextView) convertView.findViewById(R.id.detalle_nombre_producto_label);
+        txtNombre.setText(nombre);
+        TextView txtPrecio = (TextView) convertView.findViewById(R.id.detalle_precio_producto);
+        txtPrecio.setText("$ " + precio);
+        TextView txtDescripcion = (TextView) convertView.findViewById(R.id.detalle_descripcion_producto);
+        txtDescripcion.setText(descripcion);
+
         return convertView;
     }
 
@@ -119,15 +133,29 @@ public class ListaPedidoAdapter extends BaseExpandableListAdapter {
     }
 
     public boolean removeGroup(int groupPosition){
+
         productos.remove(groupPosition);
         notifyDataSetChanged();
         return true;
     }
 
-    public void addItem(String groupTitle, List<String> data){
+    public void addItem(Producto groupTitle, TextView subtotal, TextView iva, TextView total){
         productos.add(0, groupTitle);
-        productoDetalle.put(groupTitle, data);
+        actualizarValores(subtotal, iva, total, groupTitle.getPrecio());
+        //productoDetalle.put(groupTitle.getNombre(), data);
+
         notifyDataSetChanged();
+    }
+
+    private void actualizarValores(TextView subtotal, TextView iva, TextView total, String nuevo){
+
+        int vSub = Integer.parseInt(subtotal.getText().toString());
+        int vIVA = Integer.parseInt(iva.getText().toString());
+        int vTotal = Integer.parseInt(total.getText().toString());
+        int precio = Integer.parseInt(nuevo);
+
+        subtotal.setText(""+(vSub+precio));
+        total.setText(""+(vTotal+precio));
     }
 
     public void eliminarItemLista(final int groupPosition){

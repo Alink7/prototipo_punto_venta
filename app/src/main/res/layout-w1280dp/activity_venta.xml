@@ -8,13 +8,13 @@
 
     <LinearLayout
         android:id="@+id/linear1"
-        android:layout_width="600dp"
+        android:layout_width="700dp"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:padding="2dp"
         >
         <android.support.design.widget.TextInputLayout
-            android:layout_width="500dp"
+            android:layout_width="600dp"
             android:layout_height="wrap_content">
 
             <AutoCompleteTextView
@@ -35,7 +35,7 @@
 
     <LinearLayout
         android:id="@+id/linear2"
-        android:layout_width="600dp"
+        android:layout_width="700dp"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginTop="20dp"
@@ -43,7 +43,7 @@
         android:padding="2dp"
         >
         <android.support.design.widget.TextInputLayout
-            android:layout_width="600dp"
+            android:layout_width="700dp"
             android:layout_height="wrap_content">
 
             <AutoCompleteTextView
@@ -51,6 +51,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/txt_busqueda"
+                android:maxLines="1"
                 android:singleLine="true"
                 />
         </android.support.design.widget.TextInputLayout>
@@ -58,7 +59,7 @@
 
     <LinearLayout
         android:id="@+id/linear3"
-        android:layout_width="600dp"
+        android:layout_width="700dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         >
@@ -73,10 +74,11 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="600dp"
+        android:layout_width="700dp"
         android:layout_height="wrap_content"
         android:layout_above="@+id/valores_venta"
         android:id="@+id/linear4"
+        android:orientation="vertical"
         >
 
         <Button
@@ -120,8 +122,8 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:id="@+id/linear_bottom1"
-            android:paddingLeft="50dp"
-            android:paddingRight="50dp"
+            android:paddingLeft="100dp"
+            android:paddingRight="100dp"
             >
 
             <TextView
@@ -129,8 +131,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/bottom_text"
-                android:text="98.000"
-                android:textSize="32sp"
+                android:text="98000"
+                android:textSize="38sp"
                 android:textAlignment="center"
                 />
 
@@ -140,7 +142,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/bottom_text"
                 android:text="@string/txt_subtotal"
-                android:textSize="28sp"
+                android:textSize="32sp"
                 android:textAlignment="center"
                 android:textStyle="bold"
                 />
@@ -152,8 +154,8 @@
             android:orientation="vertical"
             android:id="@+id/linear_bottom2"
             android:layout_toRightOf="@id/linear_bottom1"
-            android:paddingLeft="50dp"
-            android:paddingRight="50dp"
+            android:paddingLeft="100dp"
+            android:paddingRight="100dp"
             >
 
             <TextView
@@ -161,8 +163,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/bottom_text"
-                android:text="18.620"
-                android:textSize="32sp"
+                android:text="18620"
+                android:textSize="38sp"
                 android:textAlignment="center"
                 />
 
@@ -172,7 +174,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/bottom_text"
                 android:text="@string/txt_iva"
-                android:textSize="28sp"
+                android:textSize="32sp"
                 android:textStyle="bold"
                 android:textAlignment="center"
                 />
@@ -184,16 +186,16 @@
             android:orientation="vertical"
             android:id="@+id/linear_bottom3"
             android:layout_toRightOf="@id/linear_bottom2"
-            android:paddingLeft="50dp"
-            android:paddingRight="50dp"
+            android:paddingLeft="100dp"
+            android:paddingRight="100dp"
             >
             <TextView
                 android:id="@+id/txtTotalValorBottom"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/bottom_text"
-                android:text="98.000"
-                android:textSize="32sp"
+                android:text="98000"
+                android:textSize="38sp"
                 android:textAlignment="center"
                 />
 
@@ -203,7 +205,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/bottom_text"
                 android:text="@string/txt_total"
-                android:textSize="28sp"
+                android:textSize="32sp"
                 android:textStyle="bold"
                 android:textAlignment="center"
                 />
@@ -216,8 +218,9 @@
             android:layout_alignParentRight="true"
             android:textColor="@color/bottom_text"
             android:text="@string/btn_pedido"
+            android:layout_marginRight="10dp"
             android:textSize="21sp"
-            android:padding="20dp"
+            android:padding="28dp"
             />
     </RelativeLayout>
 </RelativeLayout>

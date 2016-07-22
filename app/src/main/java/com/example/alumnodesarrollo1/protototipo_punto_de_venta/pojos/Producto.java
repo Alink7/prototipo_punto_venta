@@ -1,9 +1,12 @@
 package com.example.alumnodesarrollo1.protototipo_punto_de_venta.pojos;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by alumno.desarrollo1 on 21/07/2016.
  */
-public class Producto {
+public class Producto implements Parcelable {
 
     private String nombre, precio, descripcion;
 
@@ -12,6 +15,36 @@ public class Producto {
         this.precio = precio;
         this.descripcion = descripcion;
     }
+
+    protected Producto(Parcel in) {
+        nombre = in.readString();
+        precio = in.readString();
+        descripcion = in.readString();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(nombre);
+        dest.writeString(precio);
+        dest.writeString(descripcion);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<Producto> CREATOR = new Creator<Producto>() {
+        @Override
+        public Producto createFromParcel(Parcel in) {
+            return new Producto(in);
+        }
+
+        @Override
+        public Producto[] newArray(int size) {
+            return new Producto[size];
+        }
+    };
 
     public String getNombre() {
         return nombre;

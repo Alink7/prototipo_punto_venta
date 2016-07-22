@@ -74,6 +74,7 @@ public class VentaActivity extends AppCompatActivity {
         for(Producto p : listaBusqueda){
             productos[i++] = p.getNombre();
         }
+        //este adapter debe ser uno de Productos
         final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, productos);
         txtBusquedaProducto.setAdapter(adapter);
 
@@ -81,7 +82,7 @@ public class VentaActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String n_produco = (adapter.getItem(position));
-                cargarFragmento(n_produco);
+                //cargarFragmento(n_produco);
             }
         });
     }
@@ -93,7 +94,7 @@ public class VentaActivity extends AppCompatActivity {
         array.add(producto);
 
         //limpiar fragmento
-        cargarFragmento("");
+        cargarFragmento(null);
         adapter.addItem(listaMaestra.get(producto));
     }
 
@@ -108,9 +109,9 @@ public class VentaActivity extends AppCompatActivity {
         return listaMaeastra;
     }
 
-    public void cargarFragmento(String id){
+    public void cargarFragmento(Producto producto){
         Bundle arguments = new Bundle();
-        arguments.putString("ID_PRODUCTO", id);
+        arguments.putParcelable("PRODUCTO", producto);
         FragmentDetalleProducto fragment = new FragmentDetalleProducto();
         fragment.setArguments(arguments);
         getSupportFragmentManager().beginTransaction()

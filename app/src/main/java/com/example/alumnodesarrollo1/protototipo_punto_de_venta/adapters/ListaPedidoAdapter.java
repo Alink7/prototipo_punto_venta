@@ -33,11 +33,16 @@ public class ListaPedidoAdapter extends BaseExpandableListAdapter {
     //el map debería ser Map<String, Objeto(Producto)>
     //private HashMap<String, List<Producto>> productoDetalle;
     private List<Producto> productos;
+    private TextView subtotal, iva, total;
 
-    public ListaPedidoAdapter(Activity context, List<Producto> productos){
+    public ListaPedidoAdapter(Activity context, List<Producto> productos, TextView subtotal,
+                              TextView iva, TextView total){
         this.context = context;
         //this.productoDetalle = productoDetalle;
         this.productos = productos;
+        this.subtotal = subtotal;
+        this.iva = iva;
+        this.total = total;
     }
 
     @Override
@@ -133,29 +138,31 @@ public class ListaPedidoAdapter extends BaseExpandableListAdapter {
     }
 
     public boolean removeGroup(int groupPosition){
-
+        String precio = "-"+productos.get(groupPosition).getPrecio();
+        actualizarValores(precio);
         productos.remove(groupPosition);
         notifyDataSetChanged();
         return true;
     }
 
-    public void addItem(Producto groupTitle, TextView subtotal, TextView iva, TextView total){
+    public void addItem(Producto groupTitle){
         productos.add(0, groupTitle);
-        actualizarValores(subtotal, iva, total, groupTitle.getPrecio());
+        actualizarValores(groupTitle.getPrecio());
         //productoDetalle.put(groupTitle.getNombre(), data);
 
         notifyDataSetChanged();
     }
 
-    private void actualizarValores(TextView subtotal, TextView iva, TextView total, String nuevo){
+    private void actualizarValores( String nuevo){
 
-        int vSub = Integer.parseInt(subtotal.getText().toString());
-        int vIVA = Integer.parseInt(iva.getText().toString());
-        int vTotal = Integer.parseInt(total.getText().toString());
         int precio = Integer.parseInt(nuevo);
+        int vSub = Integer.parseInt(subtotal.getText().toString()) + precio;
+        int vTotal = Integer.parseInt(total.getText().toString()) + precio;
+        int vIva = (int)(vTotal*0.19);
 
-        subtotal.setText(""+(vSub+precio));
-        total.setText(""+(vTotal+precio));
+        subtotal.setText(""+(vSub));
+        total.setText(""+(vTotal));
+        iva.setText(""+vIva);
     }
 
     public void eliminarItemLista(final int groupPosition){

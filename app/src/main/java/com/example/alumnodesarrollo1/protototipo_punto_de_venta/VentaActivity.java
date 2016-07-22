@@ -3,13 +3,16 @@ package com.example.alumnodesarrollo1.protototipo_punto_de_venta;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.alumnodesarrollo1.protototipo_punto_de_venta.adapters.ListaPedidoAdapter;
 import com.example.alumnodesarrollo1.protototipo_punto_de_venta.bundles.PedidoDataBundle;
+import com.example.alumnodesarrollo1.protototipo_punto_de_venta.fragments.FragmentDetalleProducto;
 import com.example.alumnodesarrollo1.protototipo_punto_de_venta.pojos.Producto;
 
 import java.util.ArrayList;
@@ -43,15 +46,15 @@ public class VentaActivity extends AppCompatActivity {
         data = new PedidoDataBundle().getData();
 
         final ExpandableListView lista = (ExpandableListView)findViewById(R.id.listaProductosPedido);
-        adapter = new ListaPedidoAdapter(this, listaProductos);
+        adapter = new ListaPedidoAdapter(this, listaProductos, txtSubtotal, txtIva, txtTotal);
         lista.setAdapter(adapter);
     }
 
     public void listarProductos(){
         listaProductos = new ArrayList<>();
-        listaProductos.add(new Producto("producto1", "18.000", "descripcion1"));
-        listaProductos.add(new Producto("producto2", "19.000", "descripcion2"));
-        listaProductos.add(new Producto("producto3", "20.000", "descripcion3"));
+        listaProductos.add(new Producto("producto1", "18000", "descripcion1"));
+        listaProductos.add(new Producto("producto2", "19000", "descripcion2"));
+        listaProductos.add(new Producto("producto3", "20000", "descripcion3"));
     }
 
     public void cargarClientes(){
@@ -65,14 +68,22 @@ public class VentaActivity extends AppCompatActivity {
         txtBusquedaProducto = (AutoCompleteTextView) findViewById(R.id.txtBusquedaProducto);
         //lista meastra de productos en bodega
         listaMaestra = cargarListaMeastra();
-        Collection<Producto> listaBusqueda = listaMaestra.values();
-        String[] productos = new String[listaBusqueda.size()];
+        final Collection<Producto> listaBusqueda = listaMaestra.values();
+        final String[] productos = new String[listaBusqueda.size()];
         int i = 0;
         for(Producto p : listaBusqueda){
             productos[i++] = p.getNombre();
         }
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, productos);
+        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, productos);
         txtBusquedaProducto.setAdapter(adapter);
+
+        txtBusquedaProducto.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String n_produco = (adapter.getItem(position));
+                cargarFragmento(n_produco);
+            }
+        });
     }
 
     public void addItem(View v){
@@ -81,7 +92,9 @@ public class VentaActivity extends AppCompatActivity {
         List<String> array = new ArrayList<>();
         array.add(producto);
 
-        adapter.addItem(listaMaestra.get(producto), txtSubtotal, txtIva, txtTotal);
+        //limpiar fragmento
+        cargarFragmento("");
+        adapter.addItem(listaMaestra.get(producto));
     }
 
     public HashMap<String, Producto> cargarListaMeastra(){
@@ -93,5 +106,15 @@ public class VentaActivity extends AppCompatActivity {
         listaMaeastra.put("Huevo", new Producto("Huevo", "500", ""));
         listaMaeastra.put("Palta", new Producto("Palta", "500", ""));
         return listaMaeastra;
+    }
+
+    public void cargarFragmento(String id){
+        Bundle arguments = new Bundle();
+        arguments.putString("ID_PRODUCTO", id);
+        FragmentDetalleProducto fragment = new FragmentDetalleProducto();
+        fragment.setArguments(arguments);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_detalle_producto, fragment)
+                .commit();
     }
 }

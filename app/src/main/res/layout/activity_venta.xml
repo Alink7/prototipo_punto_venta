@@ -101,7 +101,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/bottom_text"
-                android:text="$ 98.000"
+                android:text="98000"
                 android:textSize="15dp"
                 android:textAlignment="center"
                 />
@@ -132,7 +132,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/bottom_text"
-                android:text="$ 18.620"
+                android:text="18620"
                 android:textSize="15dp"
                 android:textAlignment="center"
                 />
@@ -162,7 +162,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/bottom_text"
-                android:text="$ 98.000"
+                android:text="98000"
                 android:textSize="15dp"
                 android:textAlignment="center"
                 />

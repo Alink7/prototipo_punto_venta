@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,6 +37,8 @@ public class VentaActivity extends AppCompatActivity implements NavigationView.O
     private HashMap<String, List<String>> data;
     private HashMap<String, Producto> listaMaestra;
     private TextView txtSubtotal, txtIva, txtTotal;
+    private String strSubtotal, strIva, strTotal;
+    private Button btnAsignar;
     private boolean isTablet = false;
 
     @Override
@@ -57,6 +60,7 @@ public class VentaActivity extends AppCompatActivity implements NavigationView.O
         txtSubtotal = (TextView)findViewById(R.id.txtSubtotalValorBottom);
         txtIva = (TextView)findViewById(R.id.txtIvaValorBottom);
         txtTotal = (TextView)findViewById(R.id.txtTotalValorBottom);
+        btnAsignar = (Button)findViewById(R.id.btn_asginar_cliente);
 
         listarProductos();
         cargarClientes();
@@ -66,6 +70,16 @@ public class VentaActivity extends AppCompatActivity implements NavigationView.O
         final ExpandableListView lista = (ExpandableListView)findViewById(R.id.listaProductosPedido);
         adapter = new ListaPedidoAdapter(this, listaProductos, txtSubtotal, txtIva, txtTotal);
         lista.setAdapter(adapter);
+
+        if(savedInstanceState != null){
+            strSubtotal = savedInstanceState.getString("subtotal");
+            strIva = savedInstanceState.getString("iva");
+            strTotal = savedInstanceState.getString("total");
+
+            System.out.println("SUBTOTAL " + strSubtotal);
+            System.out.println("IVA " + strIva);
+            System.out.println("TOTAL " + strTotal);
+        }
     }
 
     public void listarProductos(){
@@ -100,10 +114,12 @@ public class VentaActivity extends AppCompatActivity implements NavigationView.O
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String n_produco = (adapter.getItem(position));
-                //cargarFragmento(n_produco);
+                cargarFragmento(listaMaestra.get(n_produco));
             }
         });
     }
+
+    //acciones de botones
 
     public void addItem(View v){
         String producto = txtBusquedaProducto.getText().toString();
@@ -112,8 +128,27 @@ public class VentaActivity extends AppCompatActivity implements NavigationView.O
         array.add(producto);
 
         //limpiar fragmento
-        cargarFragmento(null);
+        cargarFragmento(new Producto("","",""));
         adapter.addItem(listaMaestra.get(producto));
+    }
+
+    public void asignarCliente(View v){
+        txtCliente.setEnabled(false);
+        btnAsignar.setText("Editar");
+        btnAsignar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                txtCliente.setEnabled(true);
+                btnAsignar.setText("Asignar");
+                btnAsignar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        asignarCliente(v);
+                    }
+                });
+            }
+        });
+        Toast.makeText(VentaActivity.this, "El pedido se asignó a " + txtCliente.getText().toString(), Toast.LENGTH_SHORT).show();
     }
 
     public HashMap<String, Producto> cargarListaMeastra(){
@@ -138,6 +173,41 @@ public class VentaActivity extends AppCompatActivity implements NavigationView.O
     }
 
     @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        strSubtotal = txtSubtotal.getText().toString();
+        strIva = txtIva.getText().toString();
+        strTotal = txtTotal.getText().toString();
+
+        outState.putString("subtotal", strSubtotal);
+        outState.putString("iva", strIva);
+        outState.putString("total", strTotal);
+
+        System.out.println("SUBTOTAL " + strSubtotal);
+        System.out.println("IVA " + strIva);
+        System.out.println("TOTAL " + strTotal);
+
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        strSubtotal = savedInstanceState.getString("subtotal");
+        strIva = savedInstanceState.getString("iva");
+        strTotal = savedInstanceState.getString("total");
+
+        System.out.println("SUBTOTAL " + strSubtotal);
+        System.out.println("IVA " + strIva);
+        System.out.println("TOTAL " + strTotal);
+
+        txtSubtotal.setText(strSubtotal);
+        txtIva.setText(strIva);
+        txtTotal.setText(strTotal);
+    }
+
+    @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -155,9 +225,12 @@ public class VentaActivity extends AppCompatActivity implements NavigationView.O
 
         if (id == R.id.nav_venta) {
             Intent i = new Intent(this, VentaActivity.class);
+            onPause();
             startActivity(i);
         } else if (id == R.id.nav_clientes) {
-
+            Intent i = new Intent(this, ClienteListActivity.class);
+            onPause();
+            startActivity(i);
         } else if (id == R.id.nav_historial) {
 
         } else if (id == R.id.nav_salir) {

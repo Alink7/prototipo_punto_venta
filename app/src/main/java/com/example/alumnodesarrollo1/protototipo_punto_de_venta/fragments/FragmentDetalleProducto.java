@@ -11,13 +11,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.alumnodesarrollo1.protototipo_punto_de_venta.R;
+import com.example.alumnodesarrollo1.protototipo_punto_de_venta.pojos.Producto;
 
 /**
  * Created by alumno.desarrollo1 on 22/07/2016.
  */
 public class FragmentDetalleProducto extends Fragment {
 
-    private String nombreProducto;
+    private Producto producto;
 
     public FragmentDetalleProducto(){
 
@@ -27,9 +28,9 @@ public class FragmentDetalleProducto extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getArguments().containsKey("ID_PRODUCTO")) {
+        if (getArguments().containsKey("PRODUCTO")) {
             // Cargar modelo según el identificador
-            nombreProducto = (getArguments().getString("ID_PRODUCTO"));
+            producto = (getArguments().getParcelable("PRODUCTO"));
 
         }
 
@@ -40,9 +41,9 @@ public class FragmentDetalleProducto extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_detalle_producto, container);
 
-        if(nombreProducto != null) {
+        if(producto != null) {
             TextView prueba = (TextView) v.findViewById(R.id.txtPrueba);
-            prueba.setText(nombreProducto);
+            prueba.setText(producto.getNombre());
         }
         return super.onCreateView(inflater, container, savedInstanceState);
     }

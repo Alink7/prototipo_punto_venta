@@ -30,9 +30,11 @@
                 android:singleLine="true" />
         </android.support.design.widget.TextInputLayout>
         <Button
+            android:id="@+id/btn_asginar_cliente"
             android:layout_width="90dp"
             android:layout_height="wrap_content"
             android:text="@string/btn_asignar"
+            android:onClick="asignarCliente"
             />
     </LinearLayout>
 

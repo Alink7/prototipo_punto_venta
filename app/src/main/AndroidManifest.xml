@@ -14,11 +14,24 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
         <activity android:name=".VentaActivity">
-           <intent-filter>
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".ClienteListActivity"
+            android:label="@string/title_cliente_list"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".ClienteDetailActivity"
+            android:label="@string/title_cliente_detail"
+            android:parentActivityName=".ClienteListActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.alumnodesarrollo1.protototipo_punto_de_venta.ClienteListActivity" />
         </activity>
     </application>
 

@@ -14,4 +14,10 @@
     <string name="txt_descripcion">Descripción:</string>
     <string name="dialog_eliminar_item_title">¿Desea eliminar el producto del pedido?</string>
     <string name="texto_prueba">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam id erat in nibh placerat mattis sodales non lorem. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Phasellus neque libero, luctus a tristique sed, faucibus id odio. Nulla sollicitudin sit amet lectus a consectetur. Mauris dictum velit vitae augue faucibus placerat. Curabitur suscipit velit viverra, blandit arcu sed, imperdiet lorem. Ut lacinia rutrum placerat. Fusce ullamcorper risus vel dui auctor iaculis. Sed quis volutpat eros. Sed at augue in arcu semper tempor.</string>
+    <string name="title_activity_main">MainActivity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
 </resources>

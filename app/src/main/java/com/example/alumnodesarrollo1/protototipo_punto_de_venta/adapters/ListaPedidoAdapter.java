@@ -13,6 +13,7 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -98,6 +99,36 @@ public class ListaPedidoAdapter extends BaseExpandableListAdapter {
                 v.setFocusable(true);
             }
         });*/
+
+        //Cantidad
+        final TextView cantidad = (TextView) convertView.findViewById(R.id.cantidad_producto);
+
+        //Botones cantidad
+        Button menos_cantidad = (Button) convertView.findViewById(R.id.menos_cantidad);
+        Button mas_cantidad = (Button) convertView.findViewById(R.id.mas_cantidad);
+        menos_cantidad.setFocusable(false);
+        mas_cantidad.setFocusable(false);
+        menos_cantidad.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(v.getId() == R.id.menos_cantidad){
+                    if((Integer.parseInt(cantidad.getText().toString()) - 1) == 0)
+                        cantidad.setText("1");
+                    else
+                        cantidad.setText("" + (Integer.parseInt(cantidad.getText().toString()) - 1));
+                }
+            }
+        });
+        mas_cantidad.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(v.getId() == R.id.mas_cantidad){
+                    cantidad.setText(""+ (Integer.parseInt(cantidad.getText().toString()) + 1));
+                }
+            }
+        });
+
+        //Boton para eliminar item
         ImageButton eliminar_producto = (ImageButton) convertView.findViewById(R.id.eliminar_producto);
         eliminar_producto.setFocusable(false);
         eliminar_producto.setOnClickListener(new View.OnClickListener() {
@@ -115,19 +146,19 @@ public class ListaPedidoAdapter extends BaseExpandableListAdapter {
 
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-        String nombre = ((Producto)getGroup(groupPosition)).getNombre();
-        String precio = ((Producto)getGroup(groupPosition)).getPrecio();
-        String descripcion = ((Producto)getGroup(groupPosition)).getDescripcion();
+        Producto producto = ((Producto)getGroup(groupPosition));
 
         LayoutInflater inflater = LayoutInflater.from(context);
         convertView = inflater.inflate(R.layout.pedido_item_detalle,parent, false);
 
         TextView txtNombre = (TextView) convertView.findViewById(R.id.detalle_nombre_producto_label);
-        txtNombre.setText(nombre);
+        txtNombre.setText(producto.getNombre());
         TextView txtPrecio = (TextView) convertView.findViewById(R.id.detalle_precio_producto);
-        txtPrecio.setText("$ " + precio);
+        txtPrecio.setText("$ " + producto.getPrecio());
         TextView txtDescripcion = (TextView) convertView.findViewById(R.id.detalle_descripcion_producto);
-        txtDescripcion.setText(descripcion);
+        txtDescripcion.setText(producto.getDescripcion());
+        ImageView imagen = (ImageView) convertView.findViewById(R.id.imagen_producto_lista);
+        imagen.setImageResource(producto.getImagen());
 
         return convertView;
     }

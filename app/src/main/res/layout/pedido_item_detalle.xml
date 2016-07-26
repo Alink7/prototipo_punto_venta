@@ -37,7 +37,6 @@
         android:id="@+id/imagen_producto_lista"
         android:layout_width="100dp"
         android:layout_height="150dp"
-        android:background="@mipmap/ic_launcher"
         android:layout_alignParentRight="true"
         />
 

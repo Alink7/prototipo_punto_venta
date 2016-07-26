@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.alumnodesarrollo1.protototipo_punto_de_venta.dummy.DummyContent;
 import com.example.alumnodesarrollo1.protototipo_punto_de_venta.pojos.Cliente;
 
 /**

@@ -8,25 +8,32 @@ import android.os.Parcelable;
  */
 public class Producto implements Parcelable {
 
-    private String nombre, precio, descripcion;
+    private String codigo, nombre, precio, descripcion;
+    private int imagen;
 
-    public Producto(String nombre, String precio, String descripcion) {
+    public Producto(String codigo, String nombre, String precio, String descripcion, int imagen) {
+        this.codigo = codigo;
         this.nombre = nombre;
         this.precio = precio;
         this.descripcion = descripcion;
+        this.imagen = imagen;
     }
 
     protected Producto(Parcel in) {
+        codigo = in.readString();
         nombre = in.readString();
         precio = in.readString();
         descripcion = in.readString();
+        imagen = in.readInt();
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(codigo);
         dest.writeString(nombre);
         dest.writeString(precio);
         dest.writeString(descripcion);
+        dest.writeInt(imagen);
     }
 
     @Override
@@ -68,5 +75,21 @@ public class Producto implements Parcelable {
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
+    }
+
+    public int getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(int imagen) {
+        this.imagen = imagen;
+    }
+
+    public String getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
     }
 }

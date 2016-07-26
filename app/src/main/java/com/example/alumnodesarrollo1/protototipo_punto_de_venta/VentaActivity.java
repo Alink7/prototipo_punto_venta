@@ -2,12 +2,14 @@ package com.example.alumnodesarrollo1.protototipo_punto_de_venta;
 
 import android.content.Intent;
 import android.support.design.widget.NavigationView;
+import android.support.v4.text.TextUtilsCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -19,12 +21,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.alumnodesarrollo1.protototipo_punto_de_venta.adapters.ListaPedidoAdapter;
+import com.example.alumnodesarrollo1.protototipo_punto_de_venta.adapters.ListaProductosAdapter;
 import com.example.alumnodesarrollo1.protototipo_punto_de_venta.bundles.PedidoDataBundle;
 import com.example.alumnodesarrollo1.protototipo_punto_de_venta.fragments.FragmentDetalleProducto;
 import com.example.alumnodesarrollo1.protototipo_punto_de_venta.pojos.Producto;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
@@ -32,13 +34,20 @@ public class VentaActivity extends AppCompatActivity implements NavigationView.O
 
     private AutoCompleteTextView txtCliente;
     private AutoCompleteTextView txtBusquedaProducto;
+
     private List<Producto> listaProductos;
+
+    //Adapters
     private ListaPedidoAdapter adapter;
+    private ArrayAdapter<String> clientesAdapter;
+
     private HashMap<String, List<String>> data;
     private HashMap<String, Producto> listaMaestra;
+
     private TextView txtSubtotal, txtIva, txtTotal;
-    private String strSubtotal, strIva, strTotal;
     private Button btnAsignar;
+
+    private String strSubtotal, strIva, strTotal;
     private boolean isTablet = false;
 
     @Override
@@ -92,43 +101,31 @@ public class VentaActivity extends AppCompatActivity implements NavigationView.O
     public void cargarClientes(){
         txtCliente = (AutoCompleteTextView) findViewById(R.id.txtCliente);
         String[] clientes = {"cliente1", "cliente2", "cliente3", "cliente4", "cliente5"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, clientes);
-        txtCliente.setAdapter(adapter);
+        clientesAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, clientes);
+        txtCliente.setAdapter(clientesAdapter);
     }
 
     public void cargarProductos(){
         txtBusquedaProducto = (AutoCompleteTextView) findViewById(R.id.txtBusquedaProducto);
         //lista meastra de productos en bodega
         listaMaestra = cargarListaMeastra();
-        final Collection<Producto> listaBusqueda = listaMaestra.values();
-        final String[] productos = new String[listaBusqueda.size()];
-        int i = 0;
-        for(Producto p : listaBusqueda){
-            productos[i++] = p.getNombre();
-        }
-        //este adapter debe ser uno de Productos
-        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, productos);
-        txtBusquedaProducto.setAdapter(adapter);
+        final ListaProductosAdapter adapter = new ListaProductosAdapter(this, listaMaestra);
 
         txtBusquedaProducto.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String n_produco = (adapter.getItem(position));
-                cargarFragmento(listaMaestra.get(n_produco));
+                txtBusquedaProducto.setText(adapter.getItem(position).getNombre());
             }
         });
+        txtBusquedaProducto.setAdapter(adapter);
     }
 
     //acciones de botones
-
     public void addItem(View v){
         String producto = txtBusquedaProducto.getText().toString();
         txtBusquedaProducto.setText("");
-        List<String> array = new ArrayList<>();
-        array.add(producto);
-
         //limpiar fragmento
-        cargarFragmento(new Producto("","",""));
+        cargarFragmento(new Producto("", "","","", 0));
         adapter.addItem(listaMaestra.get(producto));
     }
 
@@ -150,15 +147,56 @@ public class VentaActivity extends AppCompatActivity implements NavigationView.O
         });
         Toast.makeText(VentaActivity.this, "El pedido se asignó a " + txtCliente.getText().toString(), Toast.LENGTH_SHORT).show();
     }
+    
+    public void realizarPedido(View v){
+        View focus = null;
+        boolean cancelar = false;
+
+        //validar cliente
+        String cliente = txtCliente.getText().toString();
+        if(TextUtils.isEmpty(cliente)){
+            txtCliente.setError("Este campo es obligatorio");
+            focus = txtCliente;
+            cancelar = true;
+        }
+        if(!esClienteValido(cliente)){
+            txtCliente.setError("El cliente no es válido");
+            focus = txtCliente;
+            cancelar = true;
+        }
+        //validar lista
+
+        //guardar pedido
+        if(cancelar){
+            focus.requestFocus();
+        }else {
+            int size = adapter.getGroupCount();
+            List<Producto> productosEnPedido = new ArrayList<>();
+
+            for (int i = 0; i < size; i++) {
+                productosEnPedido.add((Producto) adapter.getGroup(i));
+                System.out.println(productosEnPedido.get(i).getNombre());
+            }
+        }
+
+    }
+
+    //Valida al cliente
+    private boolean esClienteValido(String nCliente){
+        if(clientesAdapter.getPosition(nCliente) > -1)
+            return true;
+        return false;
+    }
 
     public HashMap<String, Producto> cargarListaMeastra(){
         HashMap<String, Producto> listaMaeastra = new HashMap<>();
-        listaMaeastra.put("Leche", new Producto("Leche", "500", ""));
-        listaMaeastra.put("Mantequilla", new Producto("Mantequilla", "500", ""));
-        listaMaeastra.put("Pan", new Producto("Pan", "500", ""));
-        listaMaeastra.put("Mermelada", new Producto("Mermelada", "500", ""));
-        listaMaeastra.put("Huevo", new Producto("Huevo", "500", ""));
-        listaMaeastra.put("Palta", new Producto("Palta", "500", ""));
+        listaMaeastra.put("Leche" ,new Producto("0001", "Leche", "500", "", R.mipmap.leche));
+        listaMaeastra.put("Mantequilla", new Producto("0002", "Mantequilla", "500", "", R.mipmap.mantequilla));
+        listaMaeastra.put("Pan", new Producto("0003", "Pan", "500", "", R.mipmap.pan));
+        listaMaeastra.put("Mermelada", new Producto("0004", "Mermelada", "500", "", R.mipmap.mermelada));
+        listaMaeastra.put("Huevo" ,new Producto("0005", "Huevo", "500", "", R.mipmap.huevo));
+        listaMaeastra.put("Palta", new Producto("0006", "Palta", "2000", "", R.mipmap.palta));
+
         return listaMaeastra;
     }
 

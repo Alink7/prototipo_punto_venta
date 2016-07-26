@@ -19,7 +19,7 @@
 
     <Space
         android:id="@+id/espacio"
-        android:layout_width="20dp"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/lista_nombre_producto"/>
 
